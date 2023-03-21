@@ -11,12 +11,12 @@ python3 -m torch.distributed.launch --nproc_per_node=4 main_swav.py \
 --base_lr 0.6 \
 --final_lr 0.0006 \
 --warmup_epochs 0 \
---batch_size 256 \
+--batch_size 64 \
 --size_crops 224 \
 --nmb_crops 2 \
 --min_scale_crops 0.08 \
 --max_scale_crops 1. \
---use_fp16 true \
+--use_fp16 false \
 --freeze_prototypes_niters 5005 \
 --queue_length 3840 \
 --workers 30 \

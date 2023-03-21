@@ -45,16 +45,18 @@ def init_distributed_mode(args):
 
     args.is_slurm_job = "SLURM_JOB_ID" in os.environ
 
-    if args.is_slurm_job:
-        args.rank = int(os.environ["SLURM_PROCID"])
-        args.world_size = int(os.environ["SLURM_NNODES"]) * int(
-            os.environ["SLURM_TASKS_PER_NODE"][0]
-        )
-    else:
-        # multi-GPU job (local or multi-node) - jobs started with torch.distributed.launch
-        # read environment variables
-        args.rank = int(os.environ["RANK"])
-        args.world_size = int(os.environ["WORLD_SIZE"])
+    # if args.is_slurm_job:
+    #     args.rank = int(os.environ["SLURM_PROCID"])
+    #     args.world_size = int(os.environ["SLURM_NNODES"]) * int(
+    #         os.environ["SLURM_TASKS_PER_NODE"][0]
+    #     )
+    # else:
+    #     # multi-GPU job (local or multi-node) - jobs started with torch.distributed.launch
+    #     # read environment variables
+    #     args.rank = int(os.environ["RANK"])
+    #     args.world_size = int(os.environ["WORLD_SIZE"])
+    args.rank = args.local_rank
+    print(args.rank, args.world_size, flush=True)
 
     # prepare distributed
     dist.init_process_group(
