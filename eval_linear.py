@@ -17,7 +17,7 @@ import torch.backends.cudnn as cudnn
 import torch.optim
 import torch.utils.data as data
 import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+from imagenet import ImageNet100
 
 from src.utils import (
     bool_flag,
@@ -98,10 +98,10 @@ def main():
     )
 
     # build data
-    train_dataset = datasets.ImageFolder(os.path.join(args.data_path, "train"))
-    val_dataset = datasets.ImageFolder(os.path.join(args.data_path, "val"))
+    train_dataset = ImageNet100(args.data_path, split="train")
+    val_dataset = ImageNet100(args.data_path, split="val")
     tr_normalize = transforms.Normalize(
-        mean=[0.485, 0.456, 0.406], std=[0.228, 0.224, 0.225]
+        mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
     )
     train_dataset.transform = transforms.Compose([
         transforms.RandomResizedCrop(224),
