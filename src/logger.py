@@ -76,15 +76,7 @@ class PD_Stats(object):
     def __init__(self, path, columns):
         self.path = path
 
-        # reload path stats
-        if os.path.isfile(self.path):
-            self.stats = pd.read_pickle(self.path)
-
-            # check that columns are the same
-            assert list(self.stats.columns) == list(columns)
-
-        else:
-            self.stats = pd.DataFrame(columns=columns)
+        self.stats = pd.DataFrame(columns=columns)
 
     def update(self, row, save=True):
         self.stats.loc[len(self.stats.index)] = row
