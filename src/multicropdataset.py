@@ -11,11 +11,12 @@ from PIL import ImageFilter
 import numpy as np
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
+from imagenet import ImageNet100
 
 logger = getLogger()
 
 
-class MultiCropDataset(datasets.ImageFolder):
+class MultiCropDataset(ImageNet100):
     def __init__(
         self,
         data_path,
@@ -34,9 +35,8 @@ class MultiCropDataset(datasets.ImageFolder):
             self.samples = self.samples[:size_dataset]
         self.return_index = return_index
 
-        color_transform = [get_color_distortion(), PILRandomGaussianBlur()]
         mean = [0.485, 0.456, 0.406]
-        std = [0.228, 0.224, 0.225]
+        std = [0.229, 0.224, 0.225]
         trans = []
         for i in range(len(size_crops)):
             randomresizedcrop = transforms.RandomResizedCrop(
@@ -46,7 +46,7 @@ class MultiCropDataset(datasets.ImageFolder):
             trans.extend([transforms.Compose([
                 randomresizedcrop,
                 transforms.RandomHorizontalFlip(p=0.5),
-                transforms.Compose(color_transform),
+                get_color_distortion(),
                 transforms.ToTensor(),
                 transforms.Normalize(mean=mean, std=std)])
             ] * nmb_crops[i])
